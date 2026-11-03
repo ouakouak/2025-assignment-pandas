@@ -1,12 +1,14 @@
+import geopandas as gpd
 import numpy as np
 import pandas as pd
-import geopandas as gpd
 
-from pandas_questions import load_data
-from pandas_questions import plot_referendum_map
-from pandas_questions import merge_referendum_and_areas
-from pandas_questions import merge_regions_and_departments
-from pandas_questions import compute_referendum_result_by_regions
+from pandas_questions import (
+    compute_referendum_result_by_regions,
+    load_data,
+    merge_referendum_and_areas,
+    merge_regions_and_departments,
+    plot_referendum_map,
+    )
 
 
 def test_load_data():
@@ -24,15 +26,15 @@ def test_load_data():
 
 def test_merge_regions_and_departments():
 
-    referendum, df_reg, df_dep = load_data()
+    _, df_reg, df_dep = load_data()
 
     regions_and_departments = merge_regions_and_departments(
         df_reg, df_dep
     )
 
-    assert set(regions_and_departments.columns) == set([
+    assert set(regions_and_departments.columns) == {
         'code_reg', 'name_reg', 'code_dep', 'name_dep'
-    ])
+    }
     assert regions_and_departments.shape == (109, 4)
 
 
@@ -50,11 +52,11 @@ def test_merge_referendum_and_area():
         "There should be no missing values in the DataFrame. Use dropna?"
     )
 
-    assert set(referendum_and_areas.columns) == set([
+    assert set(referendum_and_areas.columns) == {
         'Department code', 'Department name', 'Town code', 'Town name',
         'Registered', 'Abstentions', 'Null', 'Choice A', 'Choice B',
         'code_dep', 'code_reg', 'name_reg', 'name_dep'
-    ])
+    }
     assert referendum_and_areas.shape == (36565, 13), (
         "Shape of the DataFrame should be (36565, 13). "
         "Check for mismatch in column formats."
@@ -74,9 +76,9 @@ def test_compute_referendum_result_by_regions():
     )
 
     # Check result shape
-    assert set(referendum_result_by_regions.columns) == set([
+    assert set(referendum_result_by_regions.columns) == {
         'name_reg', 'Registered', 'Abstentions', 'Null', 'Choice A', 'Choice B'
-    ]), (
+    }, (
         'To keep the name of the region, you can use either another merge or '
         'a clever groupby.'
     )
